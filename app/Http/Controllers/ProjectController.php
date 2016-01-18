@@ -63,6 +63,9 @@ class ProjectController extends Controller
      */
     public function show($id)
     {
+        if ($this->repository->checkProjectExist($id) == false){
+            return ['error' => "Project ID: {$id} not found"];
+        }
         return $this->repository->find($id);
         //return Client::find($id);
     }
@@ -84,6 +87,11 @@ class ProjectController extends Controller
 
         //return Client::find($id)->update($request->all());
         //return $this->repository->update($request->all(), $id);
+
+        if ($this->repository->checkProjectExist($id) == false){
+            return ['error' => "Project ID: {$id} not found"];
+        }
+
         return $this->service->update($request->all(), $id);
     }
 
@@ -95,6 +103,10 @@ class ProjectController extends Controller
      */
     public function destroy($id)
     {
+        if ($this->repository->checkProjectExist($id) == false){
+            return ['error' => "Project ID: {$id} not found"];
+        }
+
         //Client::find($id)->delete();
         $this->repository->delete($id);
     }

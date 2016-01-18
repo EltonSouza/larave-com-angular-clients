@@ -17,4 +17,26 @@ class ClientRepositoryEloquent extends BaseRepository implements ClientRepositor
     {
         return Client::class;
     }
+
+    public function checkClientExist($clientId)
+    {
+
+        if(count($this->findWhere(['id'=>$clientId]))){
+            return true;
+        }
+
+        return false;
+    }
+
+    public function checkClientHasProject($clientId)
+    {
+
+        if(count($this->find($clientId)->project)){
+            return true;
+        }
+
+        return false;
+    }
+
+
 }

@@ -3,6 +3,7 @@
 namespace CodeProject\Http\Controllers;
 
 use CodeProject\Repositories\ClientRepository;
+use CodeProject\Repositories\ProjectRepository;
 use CodeProject\Services\ClientService;
 use Illuminate\Http\Request;
 
@@ -62,6 +63,11 @@ class ClientController extends Controller
      */
     public function show($id)
     {
+
+        if($this->repository->checkClientExist($id) == false){
+            return ['error' => "Client ID: {$id} not found"];
+        }
+
         return $this->repository->find($id);
         //return Client::find($id);
     }
@@ -83,6 +89,11 @@ class ClientController extends Controller
 
         //return Client::find($id)->update($request->all());
         //return $this->repository->update($request->all(), $id);
+
+        if($this->repository->checkClientExist($id) == false){
+            return ['error' => "Client ID: {$id} not found"];
+        }
+
         return $this->service->update($request->all(), $id);
     }
 
@@ -95,6 +106,15 @@ class ClientController extends Controller
     public function destroy($id)
     {
         //Client::find($id)->delete();
+
+        if($this->repository->checkClientExist($id) == false){
+            return ['error' => "Client ID: {$id} not found"];
+        }
+
+        if($this->repository->checkClientHasProject($id) == true){
+            return ['error' => "Client ID: {$id} can not be deleted"];
+        }
+
         $this->repository->delete($id);
     }
 }
